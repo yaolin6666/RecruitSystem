@@ -2,10 +2,10 @@ logging:
   config: classpath:log4j2.yml
 spring:
   datasource:
-    username:
-    password:
-    url: jdbc:mysql://110.40.251.64:3306/coopdatabase
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://10.100.164.47:5432/recruit
+    driver-class-name: org.postgresql.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5
@@ -28,4 +28,4 @@ spring:
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
-    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
