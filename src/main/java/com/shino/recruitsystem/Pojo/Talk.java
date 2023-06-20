@@ -18,6 +18,8 @@ public class Talk {
     private Long boss_UUID;
     @TableField("content")
     private String content;
+    @TableField("type")
+    private String type;
     @TableField(value = "create_time",fill = FieldFill.INSERT)
     private LocalDateTime create_time;
 }
