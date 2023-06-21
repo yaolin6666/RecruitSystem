@@ -26,4 +26,11 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
         List<Recruit> valueReturn=this.list(queryWrapper);
         return valueReturn;
     }
+
+    @Override
+    public Boolean recruitJob(Recruit recruit) {
+        recruit.setStatus("待查看");
+        Boolean valueReturn=this.saveOrUpdate(recruit);
+        return valueReturn;
+    }
 }
