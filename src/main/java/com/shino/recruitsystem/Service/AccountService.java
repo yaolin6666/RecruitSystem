@@ -10,5 +10,6 @@ public interface AccountService extends IService<Account>{
      *  修改密码updateByUsername
      * */
     public Account getByUsername(Account userInput);
+    public Account getByUsername(String username);
     public Boolean updateByUsername(Account userInput);//修改密码
 }

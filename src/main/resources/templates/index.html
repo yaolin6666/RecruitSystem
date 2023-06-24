@@ -1,10 +1,204 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="utf-8">
+  <title>比奇堡招聘网，在线求职招聘平台</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="比奇堡招聘网">
+  <meta name="description" content="我们要成为全球最大的招聘网站">
+  <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
 </head>
 <body>
-    <a>test</a>
+
+<div class="fly-header layui-bg-black" th:fragment="topbar">
+  <div class="layui-container">
+    <a class="fly-logo" th:href="@{/static}">
+      <img th:src="@{/images/logo.png}" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+      <li class="layui-nav-item">
+        <a th:href="@{/static}"><i class="iconfont icon-jiaoliu"></i>我要求职</a>
+      </li>
+      <li class="layui-nav-item">
+        <a th:href="@{/company/index}"><i class="iconfont icon-iconmingxinganli"></i>我要招聘</a>
+      </li>
+      <li class="layui-nav-item">
+        <a th:href="@{/admin/index}"><i class="layui-icon layui-icon-set"></i>后台管理</a>
+      </li>
+    </ul>
+    
+    <ul class="layui-nav fly-nav-user">
+      
+      <!-- 未登入的状态 -->
+      <div sec:authorize="!isAuthenticated()">
+        <li class="layui-nav-item">
+          <a th:href="@{/login}">登入</a>
+        </li>
+        <li class="layui-nav-item">
+          <a th:href="@{/reg}">注册</a>
+        </li>
+      </div>
+      <!-- 已登入的状态 -->
+      <div sec:authorize="isAuthenticated()">
+        <li class="layui-nav-item">
+          <span sec:authentication="name"></span>
+        </li>
+        <li class="layui-nav-item">
+          <a method="post" th:href="@{/information}">个人信息</a>
+        </li>
+        <li class="layui-nav-item">
+          <a method="post" th:href="@{/logout}">登出</a> <!-- sercurity -->
+        </li>
+      </div>
+    </ul>
+  </div>
+</div>
+
+<div class="fly-panel fly-column" th:fragment="seeker-topbar">
+  <div class="layui-container">
+    <ul class="layui-clear">
+      <li class="layui-hide-xs layui-this"><a th:href="@{/static}">首页</a></li>
+      <li><a th:href="@{/seeker/company}">搜索公司</a></li>
+      <li><a th:href="@{/seeker/post}">搜索职位</a></li>
+      <li><a th:href="@{/seeker/recruit}">招聘信息</a></li>
+<!--      <li><a th:href="@{/seeker/allcandidate}">投递信息</a></li>-->
+    </ul> 
+    
+<!--    <div class="fly-column-right layui-hide-xs"> -->
+<!--      <span class="fly-search"><i class="layui-icon"></i></span> -->
+<!--      <a href="jie/add.html" class="layui-btn">发表新帖</a> -->
+<!--    </div> -->
+<!--    <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> -->
+<!--      <a href="jie/add.html" class="layui-btn">发表新帖</a> -->
+<!--    </div> -->
+  </div>
+</div>
+
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="fly-panel" >
+        <img th:src="@{images/big-logo.png}" class="layui-col-md-offset3">
+      </div>
+      <div class="fly-panel">
+        <div class="fly-panel-title fly-filter">
+          <a>热门职位</a>
+          <a th:href="@{/seeker/post}" class="fly-right">更多职位></a>
+        </div>
+        <ul class="fly-list">
+          <li>
+            <div class="layui-row">
+              <div class="layui-col-md4">
+                <a th:href="@{/static}" style="color: #01AAED;font-weight:bold;font-size: 20px;"><i class="layui-icon layui-icon-star-fill"></i>部门经理</a>
+              </div>
+              <div class="layui-col-md1 layui-col-md-offset7">
+                <a th:href="@{/static}" style="color: #FF5722;font-weight:bold;font-size: 20px;"><i class="layui-icon layui-icon-rmb"></i>面议</a>
+              </div>
+            </div>
+            <div class="layui-row">
+              <div class="layui-col-md4">
+                <a th:href="@{/static}" style="color: #01AAED;font-weight:bold;font-size: 15px;"><i class="layui-icon layui-icon-home"></i>腾讯</a>
+              </div>
+              <div class="layui-col-md1 layui-col-md-offset7">
+                <a th:href="@{/static}" style="color: #3F3F3F;font-size: 15px;"><i class="layui-icon layui-icon-location"></i>天津</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="layui-row">
+              <div class="layui-col-md4">
+                <a th:href="@{/static}" style="color: #01AAED;font-weight:bold;font-size: 20px;">部门经理</a>
+              </div>
+              <div class="layui-col-md1 layui-col-md-offset7">
+                <a th:href="@{/static}" style="color: #FF5722;font-weight:bold;font-size: 20px;">面议</a>
+              </div>
+            </div>
+            <div class="layui-row">
+              <div class="layui-col-md4">
+                <a th:href="@{/static}" style="color: #01AAED;font-weight:bold;font-size: 15px;">腾讯</a>
+              </div>
+              <div class="layui-col-md1 layui-col-md-offset7">
+                <a th:href="@{/static}" style="color: #3F3F3F;font-size: 15px;">天津</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="layui-row">
+              <div class="layui-col-md4">
+                <a th:href="@{/static}" style="color: #01AAED;font-weight:bold;font-size: 20px;">部门经理</a>
+              </div>
+              <div class="layui-col-md1 layui-col-md-offset7">
+                <a th:href="@{/static}" style="color: #FF5722;font-weight:bold;font-size: 20px;">面议</a>
+              </div>
+            </div>
+            <div class="layui-row">
+              <div class="layui-col-md4">
+                <a th:href="@{/static}" style="color: #01AAED;font-weight:bold;font-size: 15px;">腾讯</a>
+              </div>
+              <div class="layui-col-md1 layui-col-md-offset7">
+                <a th:href="@{/static}" style="color: #3F3F3F;font-size: 15px;">天津</a>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="layui-row">
+              <div class="layui-col-md4">
+                <a th:href="@{/static}" style="color: #01AAED;font-weight:bold;font-size: 20px;">部门经理</a>
+              </div>
+              <div class="layui-col-md1 layui-col-md-offset7">
+                <a th:href="@{/static}" style="color: #FF5722;font-weight:bold;font-size: 20px;">面议</a>
+              </div>
+            </div>
+            <div class="layui-row">
+              <div class="layui-col-md4">
+                <a th:href="@{/static}" style="color: #01AAED;font-weight:bold;font-size: 15px;">腾讯</a>
+              </div>
+              <div class="layui-col-md1 layui-col-md-offset7">
+                <a th:href="@{/static}" style="color: #3F3F3F;font-size: 15px;">天津</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="fly-panel">
+        <div class="fly-panel-title fly-filter">
+          <a>热门公司</a>
+          <a th:href="@{/seeker/company}" class="fly-right">更多公司></a>
+        </div>
+        <div class="layui-row layui-col-space15">
+          <div class="layui-col-md6">
+            <ul class="fly-list">
+              <li>腾讯</li>
+              <li>阿里</li>
+              <li>腾讯</li>
+              <li>腾讯</li>
+            </ul>
+          </div>
+          <div class="layui-col-md6">
+            <ul class="fly-list">
+              <li>腾讯</li>
+              <li>腾讯</li>
+              <li>腾讯</li>
+              <li>腾讯</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fly-footer" th:fragment="bootombar">
+  <p><a target="_blank">比奇堡小组</a> 2020 &copy; <a target="_blank">biqibao.com 出品</a></p>
+</div>
+ 
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+
+</script>
+
+
 </body>
 </html>

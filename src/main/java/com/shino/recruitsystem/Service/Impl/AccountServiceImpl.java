@@ -19,6 +19,14 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     }
 
     @Override
+    public Account getByUsername(String username) {
+        QueryWrapper<Account> accountQueryWrapper=new QueryWrapper<>();
+        accountQueryWrapper.eq("username",username);
+        Account user=this.getOne(accountQueryWrapper);
+        return user;
+    }
+
+    @Override
     public Boolean updateByUsername(Account userInput) {
         UpdateWrapper<Account> accountUpdateWrapper=new UpdateWrapper<>();
         accountUpdateWrapper.eq("username",userInput.getUsername()).set("password",userInput.getPassword());
