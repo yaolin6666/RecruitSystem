@@ -14,12 +14,8 @@ public class MybatisplusTest {
     @Test
     public void addAccount(){
         Account account=new Account();
-        QueryWrapper queryWrapper=new QueryWrapper<>().eq("username","admin");
-        account=accountService.getOne(queryWrapper);
-        account.setUUID(null);
         account.setRole("test");
         account.setUsername("test");
-        account.setVersion(null);
         accountService.saveOrUpdate(account);
     }
 }

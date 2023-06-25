@@ -14,12 +14,12 @@
 
 <div class="fly-header layui-bg-black" th:fragment="topbar">
   <div class="layui-container">
-    <a class="fly-logo" th:href="@{/static}">
+    <a class="fly-logo" th:href="@{/}">
       <img th:src="@{/images/logo.png}" alt="layui">
     </a>
     <ul class="layui-nav fly-nav layui-hide-xs">
       <li class="layui-nav-item">
-        <a th:href="@{/static}"><i class="iconfont icon-jiaoliu"></i>我要求职</a>
+        <a th:href="@{/}"><i class="iconfont icon-jiaoliu"></i>我要求职</a>
       </li>
       <li class="layui-nav-item">
         <a th:href="@{/company/index}"><i class="iconfont icon-iconmingxinganli"></i>我要招聘</a>
@@ -59,7 +59,7 @@
 <div class="fly-panel fly-column" th:fragment="seeker-topbar">
   <div class="layui-container">
     <ul class="layui-clear">
-      <li class="layui-hide-xs layui-this"><a th:href="@{/static}">首页</a></li>
+      <li class="layui-hide-xs layui-this"><a th:href="@{/}">首页</a></li>
       <li><a th:href="@{/seeker/company}">搜索公司</a></li>
       <li><a th:href="@{/seeker/post}">搜索职位</a></li>
       <li><a th:href="@{/seeker/recruit}">招聘信息</a></li>
