@@ -20,41 +20,54 @@
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title">
-        <li class="layui-this">职位添加</li>
+        <li class="layui-this">职位添加/修改</li>
       </ul>
       <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
           <div class="layui-form layui-form-pane">
             <div>
-              <form method="post" th:action="@{/company/doaddpost}">
+              <form method="post" th:action="@{/boss/post/detail}">
+                <input th:if="${post}!=null" type="hidden" name="UUID" th:value="${post.UUID}">
                 <div class="layui-form-item">
                   <label class="layui-form-label">职位名</label>
                   <div class="layui-input-inline">
-                    <input type="text" name="name" autocomplete="off" class="layui-input">
+                    <input th:if="${post}==null" type="text" name="name" autocomplete="off" class="layui-input">
+                    <input th:if="${post}!=null" type="text" name="name" th:value="${post.name}" autocomplete="off" class="layui-input">
                   </div>
                 </div>
                 <div class="layui-form-item">
                   <label class="layui-form-label">类型</label>
                   <div class="layui-input-inline">
-                    <input type="text" name="type" autocomplete="off" class="layui-input">
+                    <input th:if="${post}==null" type="text" name="type" autocomplete="off" class="layui-input">
+                    <input th:if="${post}!=null" type="text" name="type" th:value="${post.type}" autocomplete="off" class="layui-input">
                   </div>
                 </div>
                 <div class="layui-form-item">
                   <label class="layui-form-label">薪资</label>
                   <div class="layui-input-inline">
-                    <input type="text" name="salary" autocomplete="off" class="layui-input">
+                    <input th:if="${post}==null" type="text" name="salary_Num" autocomplete="off" class="layui-input">
+                    <input th:if="${post}!=null" type="text" name="salary_Num" th:value="${post.salary_Num}" autocomplete="off" class="layui-input">
+                  </div>
+                  <label class="layui-form-label">单位</label>
+                  <div class="layui-input-inline">
+                    <input th:if="${post}!=null" th:checked="${post.salary_Unit} eq '元/月'?'checked':'false'" type="radio" name="salary_Unit" value="元/月" title="元/月">
+                    <input th:if="${post}==null" checked type="radio" name="salary_Unit" value="元/月" title="元/月">
+                    <input th:if="${post}!=null" th:checked="${post.salary_Unit} eq '元/日'?'checked':'false'" type="radio" name="salary_Unit" value="元/日" title="元/日">
+                    <input th:if="${post}==null" type="radio" name="salary_Unit" value="元/天" title="元/天">
                   </div>
                 </div>
                 <div class="layui-form-item">
                   <label class="layui-form-label">要求</label>
                   <div class="layui-input-inline">
-                    <input type="text" name="requirement" autocomplete="off" class="layui-input">
+                    <input th:if="${post}==null" type="text" name="requirement" autocomplete="off" class="layui-input">
+                    <input th:if="${post}!=null" type="text" name="requirement" th:value="${post.requirement}" autocomplete="off" class="layui-input">
                   </div>
                 </div>
                 <div class="layui-form-item">
                   <label class="layui-form-label">简介</label>
                   <div class="layui-input-inline">
-                    <input type="text" name="introduction" autocomplete="off" class="layui-input">
+                    <input th:if="${post}==null" type="text" name="introduction" autocomplete="off" class="layui-input">
+                    <input th:if="${post}!=null" type="text" name="description" th:value="${post.description}" autocomplete="off" class="layui-input">
                   </div>
                 </div>
                 <div class="layui-form-item">

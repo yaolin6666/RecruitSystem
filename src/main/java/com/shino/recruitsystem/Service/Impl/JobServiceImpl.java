@@ -38,4 +38,12 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
         List<Job> valueReturn=this.list(queryWrapper);
         return valueReturn;
     }
+
+    @Override
+    public List<Job> getByName(String name) {
+        QueryWrapper<Job> queryWrapper=new QueryWrapper<>();
+        queryWrapper.like("name",name);
+        List<Job> valueReturn=this.list(queryWrapper);
+        return valueReturn;
+    }
 }

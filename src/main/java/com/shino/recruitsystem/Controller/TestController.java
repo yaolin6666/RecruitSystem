@@ -39,6 +39,6 @@ public class TestController {
     }
     @RequestMapping("/reg")
     public String test9(){
-        return "/user/reg";
+        return "/user/login";
     }
 }

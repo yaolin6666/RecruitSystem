@@ -21,11 +21,6 @@ public class SeekerController {
     SeekerInfoService seekerInfoService;
     @Autowired
     ResumeService resumeService;
-     @RequestMapping(value = "/",method = RequestMethod.POST)
-    public void registerSeeker(@RequestParam Account account, @RequestParam SeekerInfo seekerInfo){
-         accountService.saveOrUpdate(account);
-         seekerInfoService.addSeeker(account,seekerInfo);
-     }
      @RequestMapping(value="/",method = RequestMethod.PUT)
     public void alterPassword(@RequestParam Account account){
          accountService.updateByUsername(account);

@@ -10,6 +10,7 @@
   <meta name="description" content="我们要成为全球最大的招聘网站">
   <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
   <link rel="stylesheet" th:href="@{/css/global.css}">
+  <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
 </head>
 <body>
 
@@ -26,7 +27,7 @@
         <div class="layui-tab-item layui-show">
           <div class="layui-form layui-form-pane">
             <div>
-              <form method="post" th:action="@{/static}">
+              <form method="post">
                 <div class="layui-form-item">
                   <label class="layui-form-label">姓名</label>
                   <div class="layui-input-inline">
@@ -64,21 +65,26 @@
                   </div>
                 </div>
                 <div class="layui-form-item">
-                  <label class="layui-form-label">期望职位</label>
+                  <label class="layui-form-label">住址</label>
                   <div class="layui-input-inline">
-                    <input readonly="readonly" type="text" name="post" autocomplete="off" class="layui-input" th:value="${seeker.post}">
+                    <input readonly="readonly" type="text" name="post" autocomplete="off" class="layui-input" th:value="${seeker.location}">
                   </div>
                 </div>
                 <div class="layui-form-item">
                   <label class="layui-form-label">期望薪资</label>
                   <div class="layui-input-inline">
-                    <input readonly="readonly" type="text" name="salary" autocomplete="off" class="layui-input" th:value="${seeker.salary}">
+                    <input readonly="readonly" type="text" name="salary" autocomplete="off" class="layui-input" th:value="${seeker.salary_expected_num}+${seeker.salary_expected_unit}">
                   </div>
                 </div>
               </form>
-              <form method="post" th:action="@{/company/recruit/}+${seeker.userid}">
-                <button class="layui-btn" lay-submit>招聘</button>
+              <form method="post" th:action="@{/company/recruit/}+${seeker.UUID}">
               </form>
+                <div>
+                <button class="layui-btn" lay-submit th:onclick=" 'javascript:alertStatus(\''+${candidate.UUID}+'\' ,1)'">招聘</button>
+                <button class="layui-btn" lay-submit th:onclick=" 'javascript:alertStatus(\''+${candidate.UUID}+'\' ,2)'">拒绝</button>
+                <a type="button" class="layui-btn" th:href="@{/resume/}+${resume.content}">查看简历</a>
+                <a type="button" class="layui-btn" th:href="@{/file/download/}+${candidate.resume_UUID}">下载简历</a>
+                </div>
             </div>
           </div>
         </div>
@@ -96,6 +102,32 @@
     var form = layui.form;
   });
 </script>
-
+<script th:inline="javascript">
+  function alertStatus(UUID,type){
+    let content
+    if(type==1){
+      content="同意"
+    }
+    else if(type==2)
+    {
+      content="拒绝"
+    }
+    var token=$("input[name=_csrf]").val()
+    $.ajax(
+            {
+              url:"/boss/candidate/"+UUID,
+              type: "PUT",
+              data:{
+                _csrf: token,
+                type:content
+              },
+              success(){
+                alert("操作成功")
+                $(location).attr('href', "/boss/candidate");
+              }
+            }
+    )
+  }
+</script>
 </body>
 </html>

@@ -1,18 +1,21 @@
 package com.shino.recruitsystem.Controller;
 
-import com.shino.recruitsystem.Pojo.Account;
-import com.shino.recruitsystem.Pojo.BossInfo;
-import com.shino.recruitsystem.Pojo.Job;
-import com.shino.recruitsystem.Service.AccountService;
-import com.shino.recruitsystem.Service.BossInfoService;
-import com.shino.recruitsystem.Service.JobService;
+import com.shino.recruitsystem.Pojo.*;
+import com.shino.recruitsystem.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+@Controller
 @RequestMapping("/boss")//角色限定boss
 public class BossController {
     @Autowired
@@ -21,29 +24,127 @@ public class BossController {
     BossInfoService bossInfoService;
     @Autowired
     JobService jobService;
-    @RequestMapping(value = "/",method = RequestMethod.POST)
-    public void registerBoss(@RequestParam Account account, @RequestParam BossInfo bossInfo){
-        accountService.saveOrUpdate(account);
-        bossInfoService.addBoss(account,bossInfo);
+    @Autowired
+    RecruitService recruitService;
+    @Autowired
+    SeekerInfoService seekerInfoService;
+    @Autowired
+    ResumeService resumeService;
+    @RequestMapping("/post/detail")
+    public String getPostDetail(@RequestParam(required = false) Long UUID, Model model){
+        if(UUID!=null){
+            Job job=jobService.getById(UUID);
+            model.addAttribute("post",job);
+        }
+        return "/company/addpost";
+    }
+    @RequestMapping(value = "/post/detail",method = RequestMethod.POST)
+    public String addUpdateDetail(@RequestParam(required = false) Long UUID,
+                                  @RequestParam String name,
+                                  @RequestParam String type,
+                                  @RequestParam Double salary_Num,
+                                  @RequestParam String salary_Unit,
+                                  @RequestParam String requirement,
+                                  @RequestParam String description ,
+                                  Principal principal){
+        Job job=new Job();
+        if(UUID!=null)
+            job.setUUID(UUID);
+        job.setType(type);
+        job.setName(name);
+        job.setSalary_Unit(salary_Unit);
+        job.setSalary_Num(salary_Num);
+        job.setRequirement(requirement);
+        job.setDescription(description);
+        if(job.getBoss_UUID()==null)
+        {
+            String username=principal.getName();
+            Account user=accountService.getByUsername(username);
+            job.setBoss_UUID(user.getUUID());
+        }
+        jobService.saveOrUpdate(job);
+        return "redirect:/post";
+    }
+    @RequestMapping(value = "/posts",method = RequestMethod.GET)
+    public String postList(Principal principal,Model model){
+        String username=principal.getName();
+        Account user=accountService.getByUsername(username);
+
+        user=new Account();
+        user.setUUID(1234L);
+
+        List<Job> jobList=jobService.getByBoss(user.getUUID(), null);
+        model.addAttribute("postList",jobList);
+        return "/company/post";
+    }
+    @RequestMapping(value = "/posts",method = RequestMethod.POST)
+    public String postList(Principal principal,Model model,@RequestParam String name){
+        String username=principal.getName();
+        Account user=accountService.getByUsername(username);
+
+        user=new Account();
+        user.setUUID(1234L);
+
+        List<Job> jobList=jobService.getByName(name);
+        model.addAttribute("postList",jobList);
+        return "/company/post";
     }
     @RequestMapping(value = "/",method = RequestMethod.PUT)
     public void alterPassword(@RequestParam Account account){
         accountService.saveOrUpdate(account);
     }
-    @RequestMapping(value = "/",method = RequestMethod.PATCH)
-    public void updateBossInfo(@RequestParam BossInfo bossInfo){
-        bossInfoService.saveOrUpdate(bossInfo);
+    @RequestMapping(value = "/post/{UUID}",method = RequestMethod.GET)
+    public String updateJob(@PathVariable Long UUID, Model model){
+        Job job=jobService.getById(UUID);
+        model.addAttribute("post",job);
+        return "/company/addpost";
     }
-    @RequestMapping(value = "/job",method = RequestMethod.POST)
-    public void addJob(@RequestParam Job job){
-        jobService.saveOrUpdate(job);
-    }
-    @RequestMapping(value = "/job",method = RequestMethod.PUT)
-    public void updateJob(@RequestParam Job job){
-        jobService.saveOrUpdate(job);
-    }
-    @RequestMapping(value = "/job",method = RequestMethod.DELETE)
-    public void deleteJob(@RequestParam Long UUID){
+    @RequestMapping(value = "/post/{UUID}",method = RequestMethod.DELETE)
+    public String deleteJob(@PathVariable Long UUID){
         jobService.removeById(UUID);
+        return "index";
+    }
+    @RequestMapping(value = "/candidate",method = RequestMethod.GET)
+    public String getCandidate(Principal principal,Model model,@RequestParam(required = false) Long UUID){
+        String username=principal.getName();
+        Account user=accountService.getByUsername(username);
+        List<Recruit> recruitList;
+        List<Job> jobList=new ArrayList<>();
+        HashMap<Long,Job> jobHashMap=new HashMap<>();
+
+        UUID=12315L;
+
+        if(UUID==null)
+        {
+            jobList=jobService.getByBoss(user.getUUID(), null);
+            recruitList=recruitService.getListByJobList(jobList);
+        }
+        else {
+            jobList.add(jobService.getById(UUID));
+            recruitList=recruitService.getListByJob(UUID);
+        }
+        jobList.forEach(e->{jobHashMap.put(e.getUUID(),e);});
+        HashMap<Long,SeekerInfo> seekerInfoHashMap=seekerInfoService.getMapByRecruitList(recruitList);
+        model.addAttribute("seekerMap",seekerInfoHashMap);
+        model.addAttribute("jobMap",jobHashMap);
+        model.addAttribute("candidateList",recruitList);
+        return "/company/candidate";
+    }
+    @RequestMapping(value="/candidate/{recruit_UUID}",method = RequestMethod.PUT)//同意请求
+    public String agreeRecruit(@PathVariable Long recruit_UUID,@RequestParam String type){
+        Recruit recruit=recruitService.getById(recruit_UUID);
+        recruit.setStatus(type);
+        recruitService.saveOrUpdate(recruit);
+        return "index";
+    }
+    @RequestMapping(value = "/candidate/{recruit_UUID}",method = RequestMethod.GET)
+    public String seekerDetail(Model model,@PathVariable Long recruit_UUID){
+        Recruit recruit=recruitService.getById(recruit_UUID);
+        SeekerInfo seekerInfo=seekerInfoService.getById(recruit.getSeeker_UUID());
+        Resume resume=resumeService.getById(recruit.getResume_UUID());
+        model.addAttribute("candidate",recruit);
+        model.addAttribute("seeker",seekerInfo);
+        model.addAttribute("resume",resume);
+        return "/company/details";
     }
 }

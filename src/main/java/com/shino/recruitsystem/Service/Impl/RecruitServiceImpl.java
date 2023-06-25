@@ -3,6 +3,8 @@ package com.shino.recruitsystem.Service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shino.recruitsystem.Mapper.RecruitMapper;
+import com.shino.recruitsystem.Pojo.BossInfo;
+import com.shino.recruitsystem.Pojo.Job;
 import com.shino.recruitsystem.Pojo.Recruit;
 import com.shino.recruitsystem.Service.RecruitService;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,13 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
         QueryWrapper<Recruit> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("seeker_uuid",seeker_UUID);
         List<Recruit> valueReturn=this.list(queryWrapper);
+        return valueReturn;
+    }
+
+    @Override
+    public List<Recruit> getListByJobList(List<Job> jobList) {
+        List<Long> integerList=jobList.stream().map(e->e.getUUID()).toList();
+        List<Recruit> valueReturn=this.listByIds(integerList);
         return valueReturn;
     }
 

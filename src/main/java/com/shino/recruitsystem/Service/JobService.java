@@ -9,4 +9,5 @@ import java.util.List;
 public interface JobService extends IService<Job> {
     public List<Job> getByType(Long type_UUID, @Nullable String jobType);
     public List<Job> getByBoss(Long boss_UUID, @Nullable String jobType);
+    public List<Job> getByName(String name);
 }

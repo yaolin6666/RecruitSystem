@@ -24,21 +24,9 @@
       <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
           <div class="layui-form layui-form-pane">
-            <div th:if="${type=='admin'}">
-              <form method="post" th:action="@{/doreg}" >
-                <div class="layui-form-item">
-                  <label class="layui-form-label">姓名</label>
-                  <div class="layui-input-inline">
-                    <input type="text" name="name" required autocomplete="off" class="layui-input">
-                  </div>
-                </div>
-                <div class="layui-form-item">
-                  <button class="layui-btn" lay-filter="formDemo" lay-submit>提交</button>
-                </div>
-              </form>
-            </div>
             <div th:if="${type=='seeker'}">
               <form method="post" th:action="@{/updateseeker}">
+                <input name="_method" type="hidden" value="">
                 <div class="layui-form-item">
                   <label class="layui-form-label">姓名</label>
                   <div class="layui-input-inline">
@@ -77,15 +65,13 @@
                   </div>
                 </div>
                 <div class="layui-form-item">
-                  <label class="layui-form-label">期望职位</label>
-                  <div class="layui-input-inline">
-                    <input type="text" name="post" autocomplete="off" class="layui-input" th:value="${seeker.post}">
-                  </div>
-                </div>
-                <div class="layui-form-item">
                   <label class="layui-form-label">期望薪资</label>
                   <div class="layui-input-inline">
                     <input type="text" name="salary" autocomplete="off" class="layui-input" th:value="${seeker.salary}">
+                  </div>
+                  <div class="layui-input-inline" >
+                    <input type="radio" name="salary_unit" value="元/月" title="元/月" checked>
+                    <input type="radio" name="salary_unit" value="元/天" title="元/天">
                   </div>
                 </div>
                 <div class="layui-form-item">

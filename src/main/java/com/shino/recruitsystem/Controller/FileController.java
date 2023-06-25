@@ -7,7 +7,6 @@ import com.shino.recruitsystem.Service.ResumeService;
 import com.shino.recruitsystem.Service.SeekerInfoService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +27,7 @@ public class FileController {
     SeekerInfoService seekerInfoService;
     @Autowired
     ResumeService resumeService;
-    private String filepath="";
+    private final String filepath="./src/main/resources/static/resume/";
     @PostMapping(value = "/upload")
     public Object uploading(@RequestParam("file") MultipartFile file, Principal principal) {
         String username = principal.getName();
@@ -44,8 +43,7 @@ public class FileController {
             e.printStackTrace();
             return "failure";
         }
-        Resume resume=new Resume();
-        resume.setSeeker_UUID(user.getUUID());
+        Resume resume=resumeService.getResumeBySeeker(user.getUUID()).get(0);
         resume.setContent(file.getOriginalFilename());
         resumeService.saveOrUpdate(resume);
         Map<String,Object> map=new HashMap<>();
@@ -60,8 +58,9 @@ public class FileController {
         Resume resume=resumeService.getById(resumeID);
         String filename=resume.getContent();
         String filePath = filepath ;
-        File file = new File(filePath + "/" + filename);
+        File file = new File("./src/main/resources/static/resume/test.jpg");
         if(file.exists()){
+            System.out.println("test");
             response.setContentType("application/octet-stream");
             response.setHeader("content-type", "application/octet-stream");
             response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(filename,"utf8"));

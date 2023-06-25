@@ -9,6 +9,7 @@
     <meta name="description" content="我们要成为全球最大的招聘网站">
     <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
     <link rel="stylesheet" th:href="@{/css/global.css}">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
 </head>
 <body>
 <div th:insert="~{index::topbar}"></div>
@@ -23,12 +24,12 @@
                         <a>职位列表</a>
                     </div>
                     <div class="layui-col-md1">
-                        <form method="post" th:action="@{/company/addpost}">
+                        <form method="get" th:action="@{/boss/post/detail}">
                             <button class="layui-btn layui-btn-xs" lay-submit><i class="layui-icon layui-icon-addition"></i></button>
                         </form>
                     </div>
                     <div class="layui-col-md10">
-                    <form class="fly-right" method="post" th:action="@{/company/query}">
+                    <form class="fly-right" method="post" th:action="@{/boss/posts}">
                         <input type="text" name="name" class="layui-input-inline">
                         <button class="layui-btn layui-btn-xs" lay-submit><i class="layui-icon layui-icon-search"></i></button>
                     </form>
@@ -45,6 +46,7 @@
                     <tr>
                         <th>职位名称</th>
                         <th>职位类型</th>
+                        <th>薪资</th>
                         <th>简介</th>
                         <th>操作</th>
                     </tr>
@@ -53,10 +55,12 @@
                     <tr th:each="post:${postList}">
                         <td th:text="${post.name}"></td>
                         <td th:text="${post.type}"></td>
-                        <td th:text="${post.introduction}"></td>
-                        <td class="layui-row layui-col-space10">
-                            <a type="button" class="layui-btn layui-btn-xs" th:href="@{/company/update/}+${post.postid}">修改</a>
-                            <a type="button" class="layui-btn layui-btn-xs" th:href="@{/company/delete/}+${post.postid}">删除</a>
+                        <td th:text="${post.salary_Num}+${post.salary_Unit}"></td>
+                        <td th:text="${post.description}"></td>
+                        <td class="layui-row layui-col-space5">
+                            <a type="button" class="layui-btn layui-btn-xs" th:href="@{/boss/post/}+${post.UUID}">修改</a>
+                            <p></p>
+                            <a type="button" class="layui-btn layui-btn-xs" th:onclick="'javascript:deletePost(\'' + ${post.UUID} + '\')'">删除</a>
                         </td>
                     </tr>
                     </tbody>
@@ -66,10 +70,24 @@
     </div>
 </div>
 
-
-
+<script>
+    function deletePost(UUID){
+        var token=$("input[name=_csrf]").val()
+        $.ajax(
+            {
+                url:"/boss/post/"+UUID,
+                type: "DELETE",
+                data:{
+                    _csrf: token
+                },
+                success(){
+                    location.reload(true)
+                }
+            }
+        )
+    }
+</script>
 
 <div th:insert="~{index::bootombar}"></div>
-
 </body>
 </html>

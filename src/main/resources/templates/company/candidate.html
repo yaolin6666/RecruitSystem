@@ -9,6 +9,7 @@
     <meta name="description" content="我们要成为全球最大的招聘网站">
     <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
     <link rel="stylesheet" th:href="@{/css/global.css}">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
 </head>
 <body>
 <div th:insert="~{index::topbar}"></div>
@@ -19,17 +20,25 @@
         <div class="layui-col-md12">
             <div class="fly-panel">
                 <div class="fly-panel-title fly-filter layui-row layui-col-space10">
-                    <div class="layui-col-md12">
+                    <div class="layui-col-md1">
                         <a>投递列表</a>
                     </div>
+                    <div class="layui-col-md10">
+                        <form class="fly-right" method="post" th:action="@{/boss/posts}">
+                            <input type="text" name="name" class="layui-input-inline">
+                            <button class="layui-btn layui-btn-xs" lay-submit><i class="layui-icon layui-icon-search"></i></button>
+                        </form>
+                    </div>
                 </div>
+
                 <table class="layui-table" lay-skin="line">
                     <colgroup>
-                        <col width="150">
-                        <col width="150">
-                        <col width="150">
-                        <col width="500">
-                        <col>
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="300">
+                        <col width="200">
+                        <col width="100">
                     </colgroup>
                     <thead>
                     <tr>
@@ -37,19 +46,23 @@
                         <th>职位名</th>
                         <th>状态</th>
                         <th>投递时间</th>
+                        <th>查看</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="candidate:${candidateList}">
-                        <td th:text="${candidate.seekername}"></td>
-                        <td th:text="${candidate.postname}"></td>
-                        <td th:text="${candidate.type}"></td>
-                        <td th:text="${candidate.time}"></td>
+                        <td th:text="${seekerMap.get(candidate.seeker_UUID).name}"></td>
+                        <td th:text="${jobMap.get(candidate.job_UUID).name}"></td>
+                        <td th:text="${candidate.status}"></td>
+                        <td th:text="${candidate.create_time}"></td>
                         <td class="layui-row layui-col-space10">
-                            <a type="button" class="layui-btn layui-btn-xs" th:href="@{/file/download/}+${candidate.seekerid}">下载简历</a>
-                            <a type="button" class="layui-btn layui-btn-xs" th:href="@{/company/agree/}+${candidate.id}">同意</a>
-                            <a type="button" class="layui-btn layui-btn-xs" th:href="@{/company/refuse/}+${candidate.id}">拒绝</a>
+                            <a type="button" class="layui-btn layui-btn-xs" th:href="@{/boss/candidate/}+${candidate.UUID}">查看详细</a>
+                            <a type="button" class="layui-btn layui-btn-xs" th:href="@{/file/download/}+${candidate.resume_UUID}">下载简历</a>
+                        </td>
+                        <td class="layui-row layui-col-space10">
+                            <a th:if="${candidate.status} eq '未查看' " type="button" class="layui-btn layui-btn-xs" th:onclick=" 'javascript:alertStatus(\''+${candidate.UUID}+'\' ,1)'">同意</a>
+                            <a th:if="${candidate.status} eq '未查看' " type="button" class="layui-btn layui-btn-xs" th:onclick=" 'javascript:alertStatus(\''+${candidate.UUID}+'\' ,2)'">拒绝</a>
                         </td>
                     </tr>
                     </tbody>
@@ -58,7 +71,32 @@
         </div>
     </div>
 </div>
-
+<script>
+    function alertStatus(UUID,type){
+        let content
+        if(type==1){
+            content="同意"
+        }
+        else if(type==2)
+        {
+            content="拒绝"
+        }
+        var token=$("input[name=_csrf]").val()
+        $.ajax(
+            {
+                url:"/boss/candidate/"+UUID,
+                type: "PUT",
+                data:{
+                    _csrf: token,
+                    type:content
+                },
+                success(){
+                    location.reload(true)
+                }
+            }
+        )
+    }
+</script>
 
 
 

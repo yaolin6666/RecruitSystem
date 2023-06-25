@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @TableName("recruit")
 public class Recruit {
     @TableId(value = "uuid",type = IdType.ASSIGN_ID)
-    private Long uuid;
+    private Long UUID;
     @TableField("seeker_uuid")
     private Long seeker_UUID;
     @TableField("job_uuid")
