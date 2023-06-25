@@ -50,6 +50,7 @@ public class UserController {
     public String getUserInfo(Principal principal, Model model){
         String username=principal.getName();
         Account user=accountService.getByUsername(username);
+        System.out.println(user.getRole());
         if(user.getRole().equals("seeker")) {
             model.addAttribute("type", "seeker");
             SeekerInfo seekerInfo=seekerInfoService.getById(user.getUUID());
@@ -64,14 +65,42 @@ public class UserController {
         return "/user/information";
     }
     @RequestMapping(value = "/updateseeker",method = RequestMethod.POST)
-    public String updateSeeker(@RequestParam SeekerInfo seekerInfo)
+    public String updateSeeker(@RequestParam Long uuid,
+                               @RequestParam String name,
+                               @RequestParam String sex,
+                               @RequestParam Integer age,
+                               @RequestParam String phone,
+                               @RequestParam String email,
+                               @RequestParam String education,
+                               @RequestParam Double salary_num,
+                               @RequestParam String salary_unit)
     {
+        SeekerInfo seekerInfo=seekerInfoService.getById(uuid);
+        seekerInfo.setUUID(uuid);
+        seekerInfo.setName(name);
+        seekerInfo.setSex(sex);
+        seekerInfo.setAge(age);
+        seekerInfo.setPhone(phone);
+        seekerInfo.setEmail(email);
+        seekerInfo.setEducation(education);
+        seekerInfo.setSalary_expected_num(salary_num);
+        seekerInfo.setSalary_expected_unit(salary_unit);
         seekerInfoService.saveOrUpdate(seekerInfo);
         return "redirect:/info";
     }
     @RequestMapping(value = "/updatecompany",method = RequestMethod.POST)
-    public String updateSeeker(@RequestParam BossInfo bossInfo)
+    public String updateSeeker(@RequestParam Long uuid,
+                               @RequestParam String name,
+                               @RequestParam String companyName,
+                               @RequestParam String address,
+                               @RequestParam String introduction)
     {
+        BossInfo bossInfo=bossInfoService.getById(uuid);
+        bossInfo.setUUID(uuid);
+        bossInfo.setName(name);
+        bossInfo.setCompany_name(companyName);
+        bossInfo.setAddress(address);
+        bossInfo.setIntroduction(introduction);
         bossInfoService.saveOrUpdate(bossInfo);
         return "redirect:/info";
     }

@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shino.recruitsystem.Mapper.JobMapper;
 import com.shino.recruitsystem.Pojo.Job;
+import com.shino.recruitsystem.Pojo.Recruit;
 import com.shino.recruitsystem.Service.JobService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -45,5 +47,14 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
         queryWrapper.like("name",name);
         List<Job> valueReturn=this.list(queryWrapper);
         return valueReturn;
+    }
+
+    @Override
+    public HashMap<Long, Job> getJobMapByRecruit(List<Recruit> recruitList) {
+        List<Long> UUIDList=recruitList.stream().map(e->e.getJob_UUID()).toList();
+        List<Job> jobList=this.listByIds(UUIDList);
+        HashMap<Long,Job> jobHashMap=new HashMap<>();
+        jobList.forEach(e->jobHashMap.put(e.getUUID(),e));
+        return jobHashMap;
     }
 }

@@ -1,5 +1,6 @@
 package com.shino.recruitsystem.Controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shino.recruitsystem.Pojo.*;
 import com.shino.recruitsystem.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,10 +70,6 @@ public class BossController {
     public String postList(Principal principal,Model model){
         String username=principal.getName();
         Account user=accountService.getByUsername(username);
-
-        user=new Account();
-        user.setUUID(1234L);
-
         List<Job> jobList=jobService.getByBoss(user.getUUID(), null);
         model.addAttribute("postList",jobList);
         return "/company/post";
@@ -146,5 +143,19 @@ public class BossController {
         model.addAttribute("seeker",seekerInfo);
         model.addAttribute("resume",resume);
         return "/company/details";
+    }
+    @RequestMapping(value = "/recruits",method = RequestMethod.GET)
+    public String recruitList(Model model, Principal principal){
+        String username=principal.getName();
+        Account user=accountService.getByUsername(username);
+        List<Job> jobList=jobService.getByBoss(user.getUUID(), null);
+        List<Recruit> recruitList=recruitService.getListByJobList(jobList);
+        recruitList=recruitList.stream().filter(e->e.getStatus().equals("同意")).toList();
+        HashMap<Long,SeekerInfo> seekerInfoList=seekerInfoService.getMapByRecruitList(recruitList);
+        HashMap<Long,Job> jobHashMap=jobService.getJobMapByRecruit(recruitList);
+        model.addAttribute("recruitList",recruitList);
+        model.addAttribute("seekerMap",seekerInfoList);
+        model.addAttribute("jobMap",jobHashMap);
+        return "/company/recruit";
     }
 }

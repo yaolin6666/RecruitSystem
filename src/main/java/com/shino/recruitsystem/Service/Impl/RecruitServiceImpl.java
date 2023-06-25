@@ -31,8 +31,10 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
 
     @Override
     public List<Recruit> getListByJobList(List<Job> jobList) {
-        List<Long> integerList=jobList.stream().map(e->e.getUUID()).toList();
-        List<Recruit> valueReturn=this.listByIds(integerList);
+        List<Long> longList=jobList.stream().map(e->e.getUUID()).toList();
+        QueryWrapper<Recruit> queryWrapper=new QueryWrapper<>();
+        queryWrapper.in("job_uuid",longList);
+        List<Recruit> valueReturn=this.list(queryWrapper);
         return valueReturn;
     }
 

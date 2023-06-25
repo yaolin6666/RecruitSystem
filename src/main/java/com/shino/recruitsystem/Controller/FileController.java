@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -43,7 +44,15 @@ public class FileController {
             e.printStackTrace();
             return "failure";
         }
-        Resume resume=resumeService.getResumeBySeeker(user.getUUID()).get(0);
+        Resume resume;
+        List<Resume> resumeList=resumeService.getResumeBySeeker(user.getUUID());
+        if(resumeList.size()==0){
+            resume=new Resume();
+            resume.setSeeker_UUID(user.getUUID());
+        }
+        else {
+            resume=resumeList.get(0);
+        }
         resume.setContent(file.getOriginalFilename());
         resumeService.saveOrUpdate(resume);
         Map<String,Object> map=new HashMap<>();
