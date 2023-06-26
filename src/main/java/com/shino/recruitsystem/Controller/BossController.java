@@ -1,6 +1,5 @@
 package com.shino.recruitsystem.Controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shino.recruitsystem.Pojo.*;
 import com.shino.recruitsystem.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,10 @@ public class BossController {
     SeekerInfoService seekerInfoService;
     @Autowired
     ResumeService resumeService;
+    @RequestMapping({"/","/index"})
+    public String bossIndex(){
+        return "/company/index";
+    }
     @RequestMapping("/post/detail")
     public String getPostDetail(@RequestParam(required = false) Long UUID, Model model){
         if(UUID!=null){

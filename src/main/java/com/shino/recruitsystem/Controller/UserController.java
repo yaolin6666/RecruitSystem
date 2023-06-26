@@ -23,6 +23,10 @@ public class UserController {
     BossInfoService bossInfoService;
     @Autowired
     AccountService accountService;
+    @RequestMapping("/login")
+    public String getLogin(){
+        return "/user/login";
+    }
     @RequestMapping(value = "/register",method = RequestMethod.GET)//注册
     public String regAccount(){
         return "/user/reg";
