@@ -60,9 +60,9 @@ public class UserController {
             SeekerInfo seekerInfo=seekerInfoService.getById(user.getUUID());
             model.addAttribute("seeker",seekerInfo);
         }
-        else if(user.getRole().equals("company"))
+        else if(user.getRole().equals("boss"))
         {
-            model.addAttribute("type","company");
+            model.addAttribute("type","boss");
             BossInfo bossInfo=bossInfoService.getById(user.getUUID());
             model.addAttribute("company",bossInfo);
         }
