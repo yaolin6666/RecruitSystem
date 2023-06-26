@@ -40,15 +40,20 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="candidate:${candidateList}">
-                        <td th:text="${jobMap.get(candidate.job_UUID).name}"></td>
-                        <td th:text="${jobMap.get(candidate.job_UUID).type}"></td>
-                        <td th:text="${candidate.create_time}"></td>
-                        <td th:text="${candidate.update_time}"></td>
-                        <td th:text="${candidate.status}"></td>
-                    </tr>
+                        <div th:if="${candidateList.size()} ne 0">
+                            <tr th:each="candidate:${candidateList}">
+                                <td th:text="${jobMap.get(candidate.job_UUID).name}"></td>
+                                <td th:text="${jobMap.get(candidate.job_UUID).type}"></td>
+                                <td th:text="${candidate.create_time}"></td>
+                                <td th:text="${candidate.update_time}"></td>
+                                <td th:text="${candidate.status}"></td>
+                            </tr>
+                        </div>
                     </tbody>
                 </table>
+                    <div th:if="${candidateList.size()} eq 0">
+                        <a th:href="@{/seeker/posts}">点击我选择心仪岗位投递</a>
+                    </div>
             </div>
         </div>
     </div>

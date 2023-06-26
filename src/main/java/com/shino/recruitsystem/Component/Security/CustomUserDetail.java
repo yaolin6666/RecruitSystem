@@ -6,9 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class CustomUserDetail extends Account implements UserDetails {
+public class CustomUserDetail extends UserInfo implements UserDetails {
     public CustomUserDetail(Account account){
-        super(account.getUUID(), account.getUsername(), account.getPassword(), account.getRole(), account.getVersion());
+        super(account.getUsername(), account.getPassword(), account.getRole());
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

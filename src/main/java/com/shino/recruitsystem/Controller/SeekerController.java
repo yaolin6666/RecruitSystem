@@ -74,7 +74,11 @@ public class SeekerController {
         String username=principal.getName();
         Account user=accountService.getByUsername(username);
         List<Recruit> recruitList=recruitService.getListBySeeker(user.getUUID());
-        HashMap<Long,Job> jobMap=jobService.getJobMapByRecruit(recruitList);
+        HashMap<Long,Job> jobMap=new HashMap<>();
+        if(recruitList.size()!=0)
+        {
+            jobMap=jobService.getJobMapByRecruit(recruitList);
+        }
         model.addAttribute("candidateList",recruitList);
         model.addAttribute("jobMap",jobMap);
         return "/seeker/candidate";

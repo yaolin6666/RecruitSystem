@@ -7,6 +7,7 @@ import com.shino.recruitsystem.Service.AccountService;
 import com.shino.recruitsystem.Service.BossInfoService;
 import com.shino.recruitsystem.Service.SeekerInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,7 @@ public class UserController {
     public String regAccount(@RequestParam String username,@RequestParam String password,@RequestParam String role,@RequestParam String name){
         Account account=new Account();
         account.setUsername(username);
-        account.setPassword(password);
+        account.setPassword(new BCryptPasswordEncoder().encode(password));
         account.setRole(role);
         accountService.saveOrUpdate(account);
         if(account.getRole().equals("seeker")){
@@ -48,13 +49,12 @@ public class UserController {
             bossInfo.setName(name);
             bossInfo.setName(name);
         }
-        return "redirect:/register";
+        return "redirect:/login";
     }
     @RequestMapping(value = "/info",method = RequestMethod.GET)
     public String getUserInfo(Principal principal, Model model){
         String username=principal.getName();
         Account user=accountService.getByUsername(username);
-        System.out.println(user.getRole());
         if(user.getRole().equals("seeker")) {
             model.addAttribute("type", "seeker");
             SeekerInfo seekerInfo=seekerInfoService.getById(user.getUUID());
