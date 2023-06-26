@@ -108,4 +108,18 @@ public class UserController {
         bossInfoService.saveOrUpdate(bossInfo);
         return "redirect:/info";
     }
+    @RequestMapping(value = "/updatePassword",method = RequestMethod.GET)
+    public String updatePassword(Principal principal, Model model){
+        String username=principal.getName();
+        Account user=accountService.getByUsername(username);
+        model.addAttribute("user",user);
+        return "/user/password";
+    }
+    @RequestMapping(value = "/updatePassword",method = RequestMethod.POST)
+    public String updatePassword(@RequestParam Long uuid,@RequestParam String password){
+        Account account=accountService.getById(uuid);
+        account.setPassword(new BCryptPasswordEncoder().encode(password));
+        accountService.saveOrUpdate(account);
+        return "redirect:/logout";
+    }
 }

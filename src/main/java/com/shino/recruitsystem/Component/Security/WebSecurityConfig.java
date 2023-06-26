@@ -43,6 +43,7 @@ public class WebSecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/boss/**")).hasAuthority("ROLE_boss")
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority("ROLE_admin")
                         .requestMatchers(new AntPathRequestMatcher("/seeker/candidate")).hasAuthority("ROLE_seeker")
+                        .requestMatchers(new AntPathRequestMatcher("/info")).hasAnyAuthority("ROLE_seeker","ROLE_boss")
                         .requestMatchers(new AntPathRequestMatcher("/seeker/**")).hasAnyAuthority("ROLE_boss","ROLE_admin","ROLE_seeker")
                         .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                         .anyRequest().authenticated()
