@@ -108,23 +108,26 @@ public class BossController {
     public String getCandidate(Principal principal,Model model,@RequestParam(required = false) Long UUID){
         String username=principal.getName();
         Account user=accountService.getByUsername(username);
-        List<Recruit> recruitList;
+        List<Recruit> recruitList = new ArrayList<>();
         List<Job> jobList=new ArrayList<>();
         HashMap<Long,Job> jobHashMap=new HashMap<>();
-
-        UUID=12315L;
-
         if(UUID==null)
         {
             jobList=jobService.getByBoss(user.getUUID(), null);
-            recruitList=recruitService.getListByJobList(jobList);
+            if(jobList.size()!=0)
+                recruitList=recruitService.getListByJobList(jobList);
         }
         else {
             jobList.add(jobService.getById(UUID));
             recruitList=recruitService.getListByJob(UUID);
         }
-        jobList.forEach(e->{jobHashMap.put(e.getUUID(),e);});
-        HashMap<Long,SeekerInfo> seekerInfoHashMap=seekerInfoService.getMapByRecruitList(recruitList);
+        HashMap<Long,SeekerInfo> seekerInfoHashMap=new HashMap<>();
+        if(jobList.size()!=0&&recruitList.size()!=0) {
+            jobList.forEach(e -> {
+                jobHashMap.put(e.getUUID(), e);
+            });
+            seekerInfoHashMap = seekerInfoService.getMapByRecruitList(recruitList);
+        }
         model.addAttribute("seekerMap",seekerInfoHashMap);
         model.addAttribute("jobMap",jobHashMap);
         model.addAttribute("candidateList",recruitList);
@@ -152,10 +155,17 @@ public class BossController {
         String username=principal.getName();
         Account user=accountService.getByUsername(username);
         List<Job> jobList=jobService.getByBoss(user.getUUID(), null);
-        List<Recruit> recruitList=recruitService.getListByJobList(jobList);
+        List<Recruit> recruitList=new ArrayList<>();
+        if(jobList.size()!=0) {
+            recruitList = recruitService.getListByJobList(jobList);
+        }
         recruitList=recruitList.stream().filter(e->e.getStatus().equals("同意")).toList();
-        HashMap<Long,SeekerInfo> seekerInfoList=seekerInfoService.getMapByRecruitList(recruitList);
-        HashMap<Long,Job> jobHashMap=jobService.getJobMapByRecruit(recruitList);
+        HashMap<Long,SeekerInfo> seekerInfoList=new HashMap<>();
+        HashMap<Long,Job> jobHashMap=new HashMap<>();
+        if(recruitList.size()!=0) {
+            seekerInfoList = seekerInfoService.getMapByRecruitList(recruitList);
+            jobHashMap = jobService.getJobMapByRecruit(recruitList);
+        }
         model.addAttribute("recruitList",recruitList);
         model.addAttribute("seekerMap",seekerInfoList);
         model.addAttribute("jobMap",jobHashMap);

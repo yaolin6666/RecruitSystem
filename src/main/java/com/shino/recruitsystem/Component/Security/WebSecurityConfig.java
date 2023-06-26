@@ -31,7 +31,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf().disable()
-                .authorizeRequests(authorize -> authorize
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/images/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/layui/**")).permitAll()
@@ -40,6 +40,13 @@ public class WebSecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/resume/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/login")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/boss/**")).hasAuthority("ROLE_boss")
+                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority("ROLE_admin")
+                        .requestMatchers(new AntPathRequestMatcher("/seeker/post/**")).hasAuthority("ROLE_boss")
+                        .requestMatchers(new AntPathRequestMatcher("/seeker/post/**")).hasAuthority("ROLE_admin")
+                        .requestMatchers(new AntPathRequestMatcher("/seeker/posts")).hasAuthority("ROLE_boss")
+                        .requestMatchers(new AntPathRequestMatcher("/seeker/posts")).hasAuthority("ROLE_admin")
+                        .requestMatchers(new AntPathRequestMatcher("/seeker/**")).hasAuthority("ROLE_seeker")
                         .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                         .anyRequest().authenticated()
                 ).formLogin().loginPage("/login");

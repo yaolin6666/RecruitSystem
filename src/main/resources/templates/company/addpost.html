@@ -38,9 +38,9 @@
                 <div class="layui-form-item">
                   <label class="layui-form-label">类型</label>
                   <div class="layui-input-inline">
-                    <input th:if="${post}!=null" th:checked="${post.salary_Unit} eq '实习'?'checked':'false'" type="radio" name="type" value="实习" title="实习">
+                    <input th:if="${post}!=null" th:checked="${post.type} eq '实习'?'checked':'false'" type="radio" name="type" value="实习" title="实习">
                     <input th:if="${post}==null" checked type="radio" name="type" value="实习" title="实习">
-                    <input th:if="${post}!=null" th:checked="${post.salary_Unit} eq '正式'?'checked':'false'" type="radio" name="type" value="正式" title="正式">
+                    <input th:if="${post}!=null" th:checked="${post.type} eq '正式'?'checked':'false'" type="radio" name="type" value="正式" title="正式">
                     <input th:if="${post}==null" type="radio" name="type" value="正式" title="正式">
                   </div>
                 </div>
