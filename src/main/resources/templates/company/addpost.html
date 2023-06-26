@@ -38,8 +38,10 @@
                 <div class="layui-form-item">
                   <label class="layui-form-label">类型</label>
                   <div class="layui-input-inline">
-                    <input th:if="${post}==null" type="text" name="type" autocomplete="off" class="layui-input">
-                    <input th:if="${post}!=null" type="text" name="type" th:value="${post.type}" autocomplete="off" class="layui-input">
+                    <input th:if="${post}!=null" th:checked="${post.salary_Unit} eq '实习'?'checked':'false'" type="radio" name="type" value="实习" title="实习">
+                    <input th:if="${post}==null" checked type="radio" name="type" value="实习" title="实习">
+                    <input th:if="${post}!=null" th:checked="${post.salary_Unit} eq '正式'?'checked':'false'" type="radio" name="type" value="正式" title="正式">
+                    <input th:if="${post}==null" type="radio" name="type" value="正式" title="正式">
                   </div>
                 </div>
                 <div class="layui-form-item">
@@ -48,7 +50,6 @@
                     <input th:if="${post}==null" type="text" name="salary_Num" autocomplete="off" class="layui-input">
                     <input th:if="${post}!=null" type="text" name="salary_Num" th:value="${post.salary_Num}" autocomplete="off" class="layui-input">
                   </div>
-                  <label class="layui-form-label">单位</label>
                   <div class="layui-input-inline">
                     <input th:if="${post}!=null" th:checked="${post.salary_Unit} eq '元/月'?'checked':'false'" type="radio" name="salary_Unit" value="元/月" title="元/月">
                     <input th:if="${post}==null" checked type="radio" name="salary_Unit" value="元/月" title="元/月">
@@ -66,7 +67,7 @@
                 <div class="layui-form-item">
                   <label class="layui-form-label">简介</label>
                   <div class="layui-input-inline">
-                    <input th:if="${post}==null" type="text" name="introduction" autocomplete="off" class="layui-input">
+                    <input th:if="${post}==null" type="text" name="description" autocomplete="off" class="layui-input">
                     <input th:if="${post}!=null" type="text" name="description" th:value="${post.description}" autocomplete="off" class="layui-input">
                   </div>
                 </div>

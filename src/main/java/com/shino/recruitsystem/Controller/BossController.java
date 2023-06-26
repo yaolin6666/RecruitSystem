@@ -64,7 +64,7 @@ public class BossController {
             job.setBoss_UUID(user.getUUID());
         }
         jobService.saveOrUpdate(job);
-        return "redirect:/post";
+        return "redirect:/boss/posts";
     }
     @RequestMapping(value = "/posts",method = RequestMethod.GET)
     public String postList(Principal principal,Model model){

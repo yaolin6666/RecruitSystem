@@ -17,6 +17,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @ResponseBody
@@ -33,12 +34,12 @@ public class FileController {
     public Object uploading(@RequestParam("file") MultipartFile file, Principal principal) {
         String username = principal.getName();
         Account user = accountService.getByUsername(username);
-        System.out.println(user.getUsername());
         File targetFile = new File(filepath);
+        String uuid=UUID.randomUUID().toString().replace("-","")+".pdf";
         if (!targetFile.exists()) {
             targetFile.mkdirs();
         }
-        try (FileOutputStream out = new FileOutputStream(filepath + file.getOriginalFilename());){
+        try (FileOutputStream out = new FileOutputStream(filepath + uuid)){
             out.write(file.getBytes());
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,7 +54,7 @@ public class FileController {
         else {
             resume=resumeList.get(0);
         }
-        resume.setContent(file.getOriginalFilename());
+        resume.setContent(uuid);
         resumeService.saveOrUpdate(resume);
         Map<String,Object> map=new HashMap<>();
         map.put("code",0);
@@ -67,7 +68,7 @@ public class FileController {
         Resume resume=resumeService.getById(resumeID);
         String filename=resume.getContent();
         String filePath = filepath ;
-        File file = new File("./src/main/resources/static/resume/test.jpg");
+        File file = new File(filePath+resume.getContent());
         if(file.exists()){
             System.out.println("test");
             response.setContentType("application/octet-stream");

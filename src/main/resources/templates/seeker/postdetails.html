@@ -10,6 +10,7 @@
   <meta name="description" content="我们要成为全球最大的招聘网站">
   <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
   <link rel="stylesheet" th:href="@{/css/global.css}">
+  <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
 </head>
 <body>
 
@@ -26,7 +27,10 @@
         <div class="layui-tab-item layui-show">
           <div class="layui-form layui-form-pane">
             <div>
-              <form method="post" th:action="@{/company/doaddpost}">
+                <form hidden="hidden" class="fly-right" method="post" th:action="@{/seeker/posts}">
+                  <input type="text" name="name" class="layui-input-inline">
+                  <button class="layui-btn layui-btn-xs" lay-submit><i class="layui-icon layui-icon-search"></i></button>
+                </form>
                 <div class="layui-form-item">
                   <label class="layui-form-label">职位名</label>
                   <div class="layui-input-inline">
@@ -48,7 +52,7 @@
                 <div class="layui-form-item">
                   <label class="layui-form-label">薪资</label>
                   <div class="layui-input-inline">
-                    <input readonly="readonly" type="text" name="salary" autocomplete="off" class="layui-input" th:value="${post.salary}">
+                    <input readonly="readonly" type="text" name="salary" autocomplete="off" class="layui-input" th:value="${post.salary_Num}+${post.salary_Unit}">
                   </div>
                 </div>
                 <div class="layui-form-item">
@@ -60,13 +64,10 @@
                 <div class="layui-form-item">
                   <label class="layui-form-label">简介</label>
                   <div class="layui-input-inline">
-                    <input readonly="readonly" type="text" name="introduction" autocomplete="off" class="layui-input" th:value="${post.introduction}">
+                    <input readonly="readonly" type="text" name="introduction" autocomplete="off" class="layui-input" th:value="${post.description}">
                   </div>
                 </div>
-              </form>
-              <form method="post" th:action="@{/seeker/candidate/}+${post.postid}">
-                <button class="layui-btn" lay-submit>投递</button>
-              </form>
+                <button class="layui-btn" lay-submit th:onclick=" 'javascript:recruit(\''+${post.UUID}+'\' )'">投递</button>
             </div>
           </div>
         </div>
@@ -83,6 +84,23 @@
   layui.use('form', function(){
     var form = layui.form;
   });
+</script>
+<script>
+    function recruit(UUID){
+        var token=$("input[name=_csrf]").val()
+        $.ajax(
+            {
+                url:"/seeker/recruit/"+UUID,
+                type: "PUT",
+                data:{
+                    _csrf: token
+                },
+                success(){
+                    alert("投递成功")
+                }
+            }
+        )
+    }
 </script>
 
 </body>
