@@ -81,10 +81,6 @@ public class BossController {
     public String postList(Principal principal,Model model,@RequestParam String name){
         String username=principal.getName();
         Account user=accountService.getByUsername(username);
-
-        user=new Account();
-        user.setUUID(1234L);
-
         List<Job> jobList=jobService.getByName(name);
         model.addAttribute("postList",jobList);
         return "/company/post";

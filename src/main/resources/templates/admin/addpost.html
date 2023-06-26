@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+  <meta charset="utf-8">
+  <title>职位添加</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="比奇堡招聘网">
+  <meta name="description" content="我们要成为全球最大的招聘网站">
+  <link rel="stylesheet" th:href="@{/layui/css/layui.css}" media="all">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+
+<div th:insert="~{index::topbar}"></div>
+<div th:insert="~{admin/index::admin-topbar}"></div>
+
+<div class="layui-container fly-marginTop">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title">
+        <li class="layui-this">职位添加/修改</li>
+      </ul>
+      <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+        <div class="layui-tab-item layui-show">
+          <div class="layui-form layui-form-pane">
+            <div>
+                <input th:if="${post}!=null" type="hidden" name="UUID" th:value="${post.UUID}">
+                <div class="layui-form-item">
+                  <label class="layui-form-label">职位名</label>
+                  <div class="layui-input-inline">
+                    <input th:if="${post}!=null" readonly type="text" name="name" th:value="${post.name}" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                  <label class="layui-form-label">类型</label>
+                  <div class="layui-input-inline">
+                    <input th:if="${post}!=null"  readonly th:checked="${post.type} eq '实习'?'checked':'false'" type="radio" name="type" value="实习" title="实习">
+                    <input th:if="${post}!=null"  readonly th:checked="${post.type} eq '正式'?'checked':'false'" type="radio" name="type" value="正式" title="正式">
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                  <label class="layui-form-label">薪资</label>
+                  <div class="layui-input-inline">
+                    <input th:if="${post}!=null"  readonly type="text" name="salary_Num" th:value="${post.salary_Num}+${post.salary_Unit}" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                  <label class="layui-form-label">要求</label>
+                  <div class="layui-input-inline">
+                    <input th:if="${post}!=null"  readonly type="text" name="requirement" th:value="${post.requirement}" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                  <label class="layui-form-label">简介</label>
+                  <div class="layui-input-inline">
+                    <input th:if="${post}!=null"  readonly type="text" name="description" th:value="${post.description}" autocomplete="off" class="layui-input">
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                  <a th:href="@{/admin/delete/}+${post.UUID}" class="layui-btn" lay-filter="formDemo" lay-submit>删除</a>
+                  <a th:href="@{/admin/posts}"class="layui-btn" lay-filter="formDemo" lay-submit>返回</a>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div th:insert="~{index::bootombar}"></div>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+  layui.use('form', function(){
+    var form = layui.form;
+  });
+</script>
+
+</body>
+</html>

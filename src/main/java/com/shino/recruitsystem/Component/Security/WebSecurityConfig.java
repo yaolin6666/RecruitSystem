@@ -42,11 +42,8 @@ public class WebSecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/register")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/boss/**")).hasAuthority("ROLE_boss")
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority("ROLE_admin")
-                        .requestMatchers(new AntPathRequestMatcher("/seeker/post/**")).hasAuthority("ROLE_boss")
-                        .requestMatchers(new AntPathRequestMatcher("/seeker/post/**")).hasAuthority("ROLE_admin")
-                        .requestMatchers(new AntPathRequestMatcher("/seeker/posts")).hasAuthority("ROLE_boss")
-                        .requestMatchers(new AntPathRequestMatcher("/seeker/posts")).hasAuthority("ROLE_admin")
-                        .requestMatchers(new AntPathRequestMatcher("/seeker/**")).hasAuthority("ROLE_seeker")
+                        .requestMatchers(new AntPathRequestMatcher("/seeker/candidate")).hasAuthority("ROLE_seeker")
+                        .requestMatchers(new AntPathRequestMatcher("/seeker/**")).hasAnyAuthority("ROLE_boss","ROLE_admin","ROLE_seeker")
                         .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                         .anyRequest().authenticated()
                 ).formLogin().loginPage("/login");
