@@ -42,10 +42,6 @@ public class SeekerController {
         model.addAttribute("postList",recruitList);
         return "/seeker/post";
     }
-    @RequestMapping("/post")
-    public String getPost(Model model){
-        return "/seeker/post";
-    }
     @RequestMapping("/post/{uuid}")
     public String getPost(Model model,@PathVariable Long uuid){
         Job job=jobService.getById(uuid);

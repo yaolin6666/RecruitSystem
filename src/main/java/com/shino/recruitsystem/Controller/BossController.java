@@ -85,10 +85,6 @@ public class BossController {
         model.addAttribute("postList",jobList);
         return "/company/post";
     }
-    @RequestMapping(value = "/",method = RequestMethod.PUT)
-    public void alterPassword(@RequestParam Account account){
-        accountService.saveOrUpdate(account);
-    }
     @RequestMapping(value = "/post/{UUID}",method = RequestMethod.GET)
     public String updateJob(@PathVariable Long UUID, Model model){
         Job job=jobService.getById(UUID);
