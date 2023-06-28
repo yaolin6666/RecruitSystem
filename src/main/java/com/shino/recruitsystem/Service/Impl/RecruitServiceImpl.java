@@ -40,7 +40,7 @@ public class RecruitServiceImpl extends ServiceImpl<RecruitMapper, Recruit> impl
 
     @Override
     public Boolean recruitJob(Recruit recruit) {
-        recruit.setStatus("待查看");
+        recruit.setStatus("未查看");
         Boolean valueReturn=this.saveOrUpdate(recruit);
         return valueReturn;
     }

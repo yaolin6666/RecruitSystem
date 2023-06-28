@@ -36,6 +36,10 @@ public class SeekerController {
         model.addAttribute("postList",recruitList);
         return "/seeker/post";
     }
+    @RequestMapping("/post")
+    public String getPost(Model model){
+        return "/seeker/post";
+    }
     @RequestMapping(value = "/posts",method = RequestMethod.POST)
     public String selectPosts(Model model,@RequestParam String name){
         List<Job> recruitList=jobService.getByName(name);

@@ -44,10 +44,11 @@ public class UserController {
             seekerInfo.setName(name);
             seekerInfoService.addSeeker(account,seekerInfo);
         }
-        else if(account.getRole().equals("company")){
+        if(account.getRole().equals("boss")){
             BossInfo bossInfo=new BossInfo();
             bossInfo.setName(name);
             bossInfo.setName(name);
+            bossInfoService.addBoss(account,bossInfo);
         }
         return "redirect:/login";
     }
@@ -74,6 +75,7 @@ public class UserController {
                                @RequestParam String sex,
                                @RequestParam Integer age,
                                @RequestParam String phone,
+                               @RequestParam String location,
                                @RequestParam String email,
                                @RequestParam String education,
                                @RequestParam Double salary_num,
@@ -84,6 +86,7 @@ public class UserController {
         seekerInfo.setName(name);
         seekerInfo.setSex(sex);
         seekerInfo.setAge(age);
+        seekerInfo.setLocation(location);
         seekerInfo.setPhone(phone);
         seekerInfo.setEmail(email);
         seekerInfo.setEducation(education);
