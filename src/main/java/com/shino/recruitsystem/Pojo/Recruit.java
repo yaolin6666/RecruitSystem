@@ -1,6 +1,7 @@
 package com.shino.recruitsystem.Pojo;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,9 @@ public class Recruit {
     @Version
     private Integer version;
     @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
     private LocalDateTime create_time;
     @TableField(value = "update_time",fill = FieldFill.INSERT_UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "GMT+8")
     private LocalDateTime update_time;
 }
